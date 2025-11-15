@@ -14,6 +14,29 @@
     </style>
   </head>
   <body>
+    <script>
+      // If running on GitHub Pages (or any static host without backend),
+      // redirect requests to /api/mentions to the local mock file.
+      try {
+        const host = location.hostname || '';
+        if (host.endsWith('github.io') || host === 'localhost') {
+          const origFetch = window.fetch.bind(window);
+          window.fetch = async (input, init) => {
+            try {
+              const url = typeof input === 'string' ? input : (input && input.url) || '';
+              if (url && url.includes('/api/mentions')) {
+                return origFetch('/mock_mentions.json', init);
+              }
+            } catch (e) {
+              /* fallthrough to default fetch */
+            }
+            return origFetch(input, init);
+          };
+        }
+      } catch (e) {
+        // ignore
+      }
+    </script>
     <header>
       <h1>Brand Monitor — MVP</h1>
       <div id="summary">Connecting...</div>

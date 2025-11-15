@@ -1,0 +1,44 @@
+name: Deploy static demo to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    name: Build and deploy static demo
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Build frontend (if present)
+        run: |
+          if [ -d "frontend" ]; then
+            cd frontend
+            npm ci
+            npm run build
+            cd ..
+            mv frontend/dist public_dist || true
+          fi
+
+      - name: Prepare publish directory
+        run: |
+          mkdir -p out
+          if [ -d "public_dist" ]; then
+            cp -r public_dist/* out/
+          else
+            cp -r public/* out/
+          fi
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./out

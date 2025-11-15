@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "source": "twitter",
+    "title": "Brand X launches new product — users excited",
+    "content": "Brand X released a new product today and early reviews are positive.",
+    "sentiment_label": "positive",
+    "sentiment_score": 0.85,
+    "created_at": 1699999999000
+  },
+  {
+    "id": 2,
+    "source": "news",
+    "title": "Brand X faces minor outage",
+    "content": "A short outage affected some customers but support responded quickly.",
+    "sentiment_label": "neutral",
+    "sentiment_score": 0.02,
+    "created_at": 1699999998000
+  },
+  {
+    "id": 3,
+    "source": "reddit",
+    "title": "Users complain about shipping delays",
+    "content": "Several customers reported delayed shipping in the past week.",
+    "sentiment_label": "negative",
+    "sentiment_score": -0.6,
+    "created_at": 1699999997000
+  }
+]

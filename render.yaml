@@ -1,0 +1,27 @@
+# Render manifest to deploy backend and frontend services
+# Instructions: connect your GitHub repo to Render (https://dashboard.render.com) and
+# choose "Create new service -> Infrastructure as Code (render.yaml)" or let Render
+# detect this file when creating services. After connecting, Render will provision:
+#  - brand-backend (Node web service)
+#  - brand-frontend (Static site from Vite build)
+
+services:
+  - type: web
+    name: brand-backend
+    env: node
+    plan: free
+    region: oregon
+    buildCommand: npm install
+    startCommand: node server/index.js
+    autoDeploy: true
+    # If you need environment variables add them under envVars
+    envVars: []
+
+  - type: static_site
+    name: brand-frontend
+    env: static
+    plan: free
+    region: oregon
+    buildCommand: cd frontend && npm install && npm run build
+    publishPath: frontend/dist
+    autoDeploy: true
