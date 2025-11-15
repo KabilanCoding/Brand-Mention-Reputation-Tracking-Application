@@ -1,0 +1,31 @@
+{
+  "name": "brand-monitor",
+  "version": "0.1.0",
+  "description": "MVP: Brand mention & reputation tracker (RSS + Reddit connectors, sentiment, realtime dashboard)",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "test": "jest --coverage",
+    "lint": "eslint server/",
+    "lint:fix": "eslint server/ --fix"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "eslint": "^8.54.0",
+    "prettier": "^3.1.0"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.6.1",
+    "rss-parser": "^3.12.0",
+    "node-fetch": "^2.6.7",
+    "sentiment": "^5.0.2",
+    "sqlite3": "^5.1.6",
+    "sqlite": "^4.0.25",
+    "natural": "^6.2.3",
+    "ml-kmeans": "^2.0.0"
+  }
+}

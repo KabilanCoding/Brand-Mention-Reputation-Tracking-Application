@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Brand Monitor — MVP</title>
+    <style>
+      body { font-family: Arial, Helvetica, sans-serif; margin: 0; padding: 0; }
+      header { background:#222; color:#fff; padding:10px 16px }
+      #feed { padding:16px }
+      .mention { border-bottom:1px solid #eee; padding:8px 0 }
+      .positive { color: green }
+      .negative { color: red }
+      .neutral { color: #777 }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Brand Monitor — MVP</h1>
+      <div id="summary">Connecting...</div>
+    </header>
+    <div id="feed"></div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const socket = io();
+      const feed = document.getElementById('feed');
+      const summary = document.getElementById('summary');
+
+      let counts = { positive:0, negative:0, neutral:0 };
+
+      function renderSummary(){
+        summary.textContent = `Mentions — +: ${counts.positive}  -: ${counts.negative}  ~: ${counts.neutral}`;
+      }
+
+      socket.on('mention', m => {
+        counts[m.sentiment_label] = (counts[m.sentiment_label] || 0) + 1;
+        renderSummary();
+        const div = document.createElement('div');
+        div.className = 'mention ' + m.sentiment_label;
+        div.innerHTML = `<strong>${m.source}</strong> <a href="${m.url || '#'}" target="_blank">${m.title || m.url || ''}</a>
+          <div>${(m.content || '').slice(0,300)}</div>
+          <small>sentiment: ${m.sentiment_label} (${m.sentiment_score.toFixed(3)})</small>`;
+        feed.insertBefore(div, feed.firstChild);
+      });
+
+      // initial load
+      fetch('/api/mentions').then(r=>r.json()).then(list=>{
+        counts = { positive:0, negative:0, neutral:0 };
+        for (const m of list.reverse()){
+          counts[m.sentiment_label] = (counts[m.sentiment_label] || 0) + 1;
+          const div = document.createElement('div');
+          div.className = 'mention ' + m.sentiment_label;
+          div.innerHTML = `<strong>${m.source}</strong> <a href="${m.url || '#'}" target="_blank">${m.title || m.url || ''}</a>
+            <div>${(m.content || '').slice(0,300)}</div>
+            <small>sentiment: ${m.sentiment_label} (${m.sentiment_score.toFixed(3)})</small>`;
+          feed.appendChild(div);
+        }
+        renderSummary();
+      }).catch(err=> console.error(err));
+    </script>
+  </body>
+</html>
