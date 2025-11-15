@@ -21,16 +21,31 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
-        cache: 'npm'
 
-    - name: Install dependencies
-      run: npm install
+    - name: Cache node modules and npm
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.npm
+          node_modules
+        key: ${{ runner.os }}-node-${{ matrix.node-version }}-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-${{ matrix.node-version }}-
+
+    - name: Node & npm versions
+      run: node -v && npm -v
+
+    - name: Install dependencies (with retry)
+      run: |
+        npm ci --prefer-offline --no-audit --progress=false || (
+          echo 'Retrying npm ci once'; npm ci --prefer-offline --no-audit --progress=false
+        )
 
     - name: Run linter
       run: npm run lint
 
     - name: Run tests
-      run: npm run test
+      run: npm run test --runInBand
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3
