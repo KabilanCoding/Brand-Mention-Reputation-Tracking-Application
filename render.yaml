@@ -17,6 +17,6 @@ services:
     plan: free
     region: oregon
     buildCommand: cd frontend && npm install && npm run build
-    publishPath: frontend/dist/assets
-    staticPublishPath: frontend/dist/assets
+    publishPath: frontend/dist/assets/index.html
+    staticPublishPath: frontend/dist/assets/index.html
     autoDeploy: true
