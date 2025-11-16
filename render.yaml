@@ -10,12 +10,13 @@ services:
     envVars:
       - key: NODE_VERSION
         value: 18
+
   - type: web
     name: brand-frontend
     env: static
     plan: free
     region: oregon
     buildCommand: cd frontend && npm install && npm run build
-    publishPath: frontend
-    staticPublishPath: frontend
+    publishPath: frontend/dist/assets
+    staticPublishPath: frontend/dist/assets
     autoDeploy: true
