@@ -11,15 +11,15 @@ services:
     env: node
     plan: free
     region: oregon
-    buildCommand: npm install
+    buildCommand: cd server && npm install
     startCommand: node server/index.js
     autoDeploy: true
-    # If you need environment variables add them under envVars
-    envVars: []
+    envVars:
+      - key: NODE_VERSION
+        value: 18
 
-  - type: static_site
+  - type: static
     name: brand-frontend
-    env: static
     plan: free
     region: oregon
     buildCommand: cd frontend && npm install && npm run build
