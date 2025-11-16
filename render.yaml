@@ -10,7 +10,6 @@ services:
     envVars:
       - key: NODE_VERSION
         value: 18
-
   - type: web
     name: brand-frontend
     env: static
